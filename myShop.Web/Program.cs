@@ -13,8 +13,15 @@ namespace myShop.Web
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 			builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
-			builder.Configuration.GetConnectionString("DefaultConnection")
-			));
+			builder.Configuration.GetConnectionString("DefaultConnection"),
+			 sqlServerOptionsAction: sqlOptions =>
+			 {
+				 sqlOptions.EnableRetryOnFailure(
+					 maxRetryCount: 5,
+					 maxRetryDelay: TimeSpan.FromSeconds(10),
+					 errorNumbersToAdd: null);
+			 })
+			);
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
