@@ -1,6 +1,8 @@
 ﻿@model Category
 @{
-	ViewData["title"] = "Delete";
+	ViewBag.PageTitle = "Category Management";
+	ViewBag.CardTitle = "Delete Category";
+	Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 <form method="post" asp-action="DeleteCategory">
 	<input hidden asp-for="Id" />

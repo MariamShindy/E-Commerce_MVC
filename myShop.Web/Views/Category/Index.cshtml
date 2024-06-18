@@ -1,14 +1,20 @@
 ﻿@model IEnumerable<Category>
-
-<h3>Categories List</h3>
+@{
+	ViewBag.PageTitle = "Category Management";
+	ViewBag.CardTitle = "View Categories";
+	Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
 <br />
-<a href="/Category/Create" class="btn btn-primary">Create</a>
+<div>
+	<a href="/Category/Create" class="btn btn-primary">Create</a>
+</div>
 
 <table class="table table-hover" width="100%">
 	<tr>
 		<td>Name</td>
 		<td>Description</td>
 		<td>Date Created</td>
+		<td>Actions</td>
 	</tr>
 	@foreach(var item in Model)
 	{

@@ -1,6 +1,8 @@
 ﻿@model Category
 @{
-	ViewData["title"] = "Edit";
+	ViewBag.PageTitle = "Category Management";
+	ViewBag.CardTitle = "Edit Category";
+	Layout = "~/Views/Shared/_Dashboard.cshtml";
 }
 <form method="post" asp-action="Edit">
 	<input hidden asp-for="Id" />

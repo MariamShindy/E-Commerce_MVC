@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using myShop.Web.Data;
+using myShop.DataAccess;
+using myShop.DataAccess.Repositories;
+using myShop.Entities.IRepositories;
 
 namespace myShop.Web
 {
@@ -22,6 +24,7 @@ namespace myShop.Web
 					 errorNumbersToAdd: null);
 			 })
 			);
+			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.
