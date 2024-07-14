@@ -1,0 +1,26 @@
+﻿@{
+	ViewBag.PageTitle = "Product Management";
+	ViewBag.CardTitle = "View Products";
+	Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+<br />
+<div>
+	<a href="/Admin/Product/Create" class="btn btn-primary">Create</a>
+</div>
+
+<table id="myTable" class="table table-hover" width="100%">
+	<thead>
+	<tr>
+		<td>Name</td>
+		<td>Description</td>
+		<td>Price</td>
+		<td>Category</td>
+		<td>Actions</td>
+	</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+@section Scripts{
+	<script src="~/js/productsJs.js"></script>
+}
