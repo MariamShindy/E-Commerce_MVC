@@ -34,11 +34,14 @@ namespace myShop.Web.Areas.Customer.Controllers
 			}
 			ShoppingCartViewModel = new ShoppingCartViewModel() 
 			{ 
-			CartsList = _unitOfWork._ShoppingCartRepository.GetAll(u => u.ApplicationUserId == claim.Value,includeWord:"Product")
+			CartsList = _unitOfWork._ShoppingCartRepository.GetAll(u => u.ApplicationUserId == claim.Value,includeWord:"Product"),
+
+		    TotalCarts = 0 // new
 			};
 			foreach(var item in ShoppingCartViewModel.CartsList)
 			{
-				ShoppingCartViewModel.TotalCarts += (item.Count * item.Product.Price); 
+				ShoppingCartViewModel.TotalCarts += (item.Count * item.Product.Price);
+				Console.WriteLine($"Item: {item.Product.Name}, Price: {item.Product.Price}, Count: {item.Count}, Total: {ShoppingCartViewModel.TotalCarts}");
 			}
  			return View(ShoppingCartViewModel);
 		}
@@ -63,12 +66,15 @@ namespace myShop.Web.Areas.Customer.Controllers
 			ShoppingCartViewModel.Order.Address = ShoppingCartViewModel.Order.ApplicationUser.Address;
 			ShoppingCartViewModel.Order.City = ShoppingCartViewModel.Order.ApplicationUser.City;
 			ShoppingCartViewModel.Order.Phone = ShoppingCartViewModel.Order.ApplicationUser.PhoneNumber;
-
-
+			
+			ShoppingCartViewModel.TotalCarts = 0; // new
 			foreach (var item in ShoppingCartViewModel.CartsList)
 			{
 				ShoppingCartViewModel.TotalCarts += (item.Count * item.Product.Price);
+				Console.WriteLine($"Item: {item.Product.Name}, Price: {item.Product.Price}, Count: {item.Count}, Total: {ShoppingCartViewModel.TotalCarts}");
 			}
+			//new
+			ShoppingCartViewModel.Order.TotalPrice = ShoppingCartViewModel.TotalCarts;
 			return View(ShoppingCartViewModel);
 		}
 		[HttpPost]
@@ -101,6 +107,7 @@ namespace myShop.Web.Areas.Customer.Controllers
 			{
 				shoppingCartViewModel.TotalCarts += (item.Count * item.Product.Price);
 			}
+			shoppingCartViewModel.Order.TotalPrice = shoppingCartViewModel.TotalCarts;
 			_unitOfWork._OrderRepository.Add(shoppingCartViewModel.Order);
 			_unitOfWork.Complete();
 			foreach (var item in shoppingCartViewModel.CartsList)
@@ -122,7 +129,7 @@ namespace myShop.Web.Areas.Customer.Controllers
 		}
 		public string StripeOperations(ShoppingCartViewModel shoppingCartViewModel)
 		{
-			var domain = "https://localhost:7020/";
+			var domain = "https://localhost:44309/";
 			var options = new Stripe.Checkout.SessionCreateOptions
 			{
 				LineItems = new List<SessionLineItemOptions>(),

@@ -4,6 +4,7 @@ using myShop.Entities.IRepositories;
 using myShop.Entities.Models;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using X.PagedList.Extensions;
 
 namespace myShop.Web.Areas.Customer.Controllers
 {
@@ -16,9 +17,11 @@ namespace myShop.Web.Areas.Customer.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
-            var products = _unitOfWork._ProductRepository.GetAll();
+            var pageNum = page ?? 1;
+            int pageSize = 8;
+            var products = _unitOfWork._ProductRepository.GetAll().ToPagedList(pageNum,pageSize);
             return View(products);
         }
         public IActionResult Details(int Id)

@@ -23,12 +23,13 @@ namespace myShop.DataAccess.Repositories
 			_applicationDbContext.Orders.Update(order);
 		}
 
-		public void UpdateOrderStatus(int id, string orderStatus, string paymentStatus)
+		public void UpdateOrderStatus(int id, string orderStatus, string? paymentStatus)
 		{
 			var orderFromDb = _applicationDbContext.Orders.FirstOrDefault(o => o.Id == id);
 			if (orderFromDb != null)
 			{
 				orderFromDb.OrderStatus = orderStatus;
+				orderFromDb.PaymentDate = DateTime.Now;
 				if(paymentStatus != null)
 				{ 
 				orderFromDb.PaymentStatus = paymentStatus;

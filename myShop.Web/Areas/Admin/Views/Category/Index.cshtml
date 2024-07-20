@@ -6,25 +6,27 @@
 }
 <br />
 <div>
-	<a href="/Category/Create" class="btn btn-primary">Create</a>
+	<a href="/Admin/Category/Create" class="btn btn-primary">Create</a>
 </div>
 
 <table class="table table-hover" width="100%">
+	<thead class="text-bold">
 	<tr>
 		<td>Name</td>
 		<td>Description</td>
 		<td>Date Created</td>
 		<td>Actions</td>
 	</tr>
+	</thead>
 	@foreach(var item in Model)
 	{
 		<tr>
 			<td>@item.Name</td>
-			<td>@item.Description</td>
+			<td>@Html.Raw(item.Description)</td>
 			<td>@item.CreatedTime</td>
 			<td>
-				<a href="/Category/Edit/@item.Id" class="btn btn-success">Edit</a>
-				<a href="/Category/Delete/@item.Id" class="btn btn-danger">Delete</a>
+				<a href="/Admin/Category/Edit/@item.Id" class="btn btn-success">Edit</a>
+				<a href="/Admin/Category/Delete/@item.Id" class="btn btn-danger">Delete</a>
 			</td>
 		</tr>
 	}

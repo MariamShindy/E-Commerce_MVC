@@ -29,7 +29,7 @@ namespace myShop.Web
 					 errorNumbersToAdd: null);
 			 })
 			);
-
+			builder.Services.Configure<StripeData>(builder.Configuration.GetSection("Stripe"));
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(4)).AddDefaultTokenProviders().AddDefaultUI()
             .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

@@ -17,6 +17,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0-preview.4.24271.3" />
     <PackageReference Include="Stripe.net" Version="45.3.0" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>

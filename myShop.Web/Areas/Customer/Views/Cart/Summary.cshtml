@@ -1,5 +1,7 @@
 ﻿@using myShop.Entities.ViewModels
+@using Microsoft.Extensions.Options  
 @model ShoppingCartViewModel
+ @inject IOptions<Utilities.StripeData> Stripe 
 
 <!DOCTYPE html>
 <html lang="en">

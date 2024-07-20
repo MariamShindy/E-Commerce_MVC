@@ -13,7 +13,7 @@
 	</div>
 	<div class="mb-3">
 		<label asp-for="Product.Description"></label>
-		<input asp-for="Product.Description" class="form-control" />
+		<textarea id="myTextArea" asp-for="Product.Description" class="form-control"></textarea>
 		<span asp-validation-for="Product.Description" class="text-danger"></span>
 	</div>
 	<div class="mb-3">
@@ -23,7 +23,7 @@
 	</div>
 	<div class="mb-3">
 		<label asp-for="Product.Img"></label>
-		<input name="file" id="imgFile" type="file" class="form-control" />
+		<input name="file" id="imgFile" type="file" class="form-control" onchange="fillImg(event);" />
 	</div>
 	<div class="mb-3">
 		<label asp-for="Product.CategoryId"></label>
@@ -38,7 +38,21 @@
 	</div>
 
 </form>
-
+<div class="col-md-4">
+	<div class="container">
+		<img src="@Model.Product.Img" id="imagePreview" style="width:500px;height:300px;margin-left:300px" />
+	</div>
+</div>
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
+	<script>
+		tinymce.init({
+			selector: '#myTextArea',
+		});
+		var fillImg = function (event) {
+			var imgHolder = document.getElementById("imagePreview");
+			imgHolder.src = URL.createObjectURL(event.target.files[0]);
+
+		}
+	</script>
 }
