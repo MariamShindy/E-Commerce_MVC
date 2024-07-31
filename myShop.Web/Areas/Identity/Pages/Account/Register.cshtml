@@ -3,6 +3,17 @@
 @model RegisterModel
 
 <h1>@ViewData["Title"]</h1>
+<style>
+    .imgDiv{
+        background-size: 100% 100%;
+    }
+
+    .registerImg{
+        height : auto ;
+        max-width :100%;
+
+    }
+</style>
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
 <div class="row">
@@ -60,7 +71,7 @@
     </div>
     <div class="col-md-6 col-md-offset-2">
         <section>
-            <h3>Use another service to register.</h3>
+            @* <h3>Use another service to register.</h3>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
@@ -85,7 +96,10 @@
                         </div>
                     </form>
                 }
-            }
+            } *@
+            <div class="imgDiv">
+                <img class="registerImg" src="~/img/Register.png"/>
+            </div>
         </section>
     </div>
 </div>

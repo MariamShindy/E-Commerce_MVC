@@ -188,8 +188,10 @@ namespace myShop.Web.Areas.Customer.Controllers
 			if(shoppingCart.Count <= 1)
 			{
 				_unitOfWork._ShoppingCartRepository.Remove(shoppingCart);
-				_unitOfWork.Complete();
-				return RedirectToAction("Index","Home");
+				var count = _unitOfWork._ShoppingCartRepository.GetAll(u => u.ApplicationUserId == shoppingCart.ApplicationUserId).ToList().Count() -1;
+				HttpContext.Session.SetInt32(CartSession.CartSessionKey, count);
+				//_unitOfWork.Complete();
+				//return RedirectToAction("Index","Home");
 			}
 			else 
 			{ 	
@@ -204,6 +206,8 @@ namespace myShop.Web.Areas.Customer.Controllers
 			var shoppingCart = _unitOfWork._ShoppingCartRepository.GetFirstOrDefault(x => x.Id == cartId);
 			_unitOfWork._ShoppingCartRepository.Remove(shoppingCart);
 			_unitOfWork.Complete();
+			var count = _unitOfWork._ShoppingCartRepository.GetAll(u => u.ApplicationUserId == shoppingCart.ApplicationUserId).ToList().Count() - 1;
+			HttpContext.Session.SetInt32(CartSession.CartSessionKey, count);
 			return RedirectToAction("Index");
 		}
 	}

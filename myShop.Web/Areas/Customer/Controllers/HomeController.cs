@@ -4,6 +4,7 @@ using myShop.Entities.IRepositories;
 using myShop.Entities.Models;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using Utilities;
 using X.PagedList.Extensions;
 
 namespace myShop.Web.Areas.Customer.Controllers
@@ -21,30 +22,30 @@ namespace myShop.Web.Areas.Customer.Controllers
         {
             var pageNum = page ?? 1;
             int pageSize = 8;
-            var products = _unitOfWork._ProductRepository.GetAll().ToPagedList(pageNum,pageSize);
+            var products = _unitOfWork._ProductRepository.GetAll().ToPagedList(pageNum, pageSize);
             return View(products);
         }
         public IActionResult Details(int Id)
         {
-			var product = _unitOfWork._ProductRepository.GetFirstOrDefault(p => p.Id == Id, includeWord: "Category");
+            var product = _unitOfWork._ProductRepository.GetFirstOrDefault(p => p.Id == Id, includeWord: "Category");
 
-			if (product == null)
-			{
-				return NotFound();
-			}
-			ShoppingCart shoppingCart = new()
+            if (product == null)
+            {
+                return NotFound();
+            }
+            ShoppingCart shoppingCart = new()
             {
                 Product = product,
                 Count = 1
             };
-             return View(shoppingCart);
+            return View(shoppingCart);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-		public IActionResult Details(ShoppingCart shoppingCart)
-		{
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -53,29 +54,31 @@ namespace myShop.Web.Areas.Customer.Controllers
                 return Unauthorized();
             }
             shoppingCart.ApplicationUserId = claim.Value;
-			shoppingCart.Product = _unitOfWork._ProductRepository.GetFirstOrDefault(p => p.Id == shoppingCart.Product.Id);
+            shoppingCart.Product = _unitOfWork._ProductRepository.GetFirstOrDefault(p => p.Id == shoppingCart.Product.Id);
 
-			if (shoppingCart.Product == null)
-			{
-				return NotFound();
-			}
-			shoppingCart.Id = 0;
-
-			ShoppingCart shoppingCartObj = _unitOfWork._ShoppingCartRepository.GetFirstOrDefault(s => s.ApplicationUserId == claim.Value && s.Product.Id == shoppingCart.Product.Id);
-			
-			if (shoppingCartObj == null)
+            if (shoppingCart.Product == null)
             {
-				Console.WriteLine("**************No existing shopping cart found, adding new one**************.");
-				_unitOfWork._ShoppingCartRepository.Add(shoppingCart);
-			}
+                return NotFound();
+            }
+            shoppingCart.Id = 0;
+
+            ShoppingCart shoppingCartObj = _unitOfWork._ShoppingCartRepository.GetFirstOrDefault(s => s.ApplicationUserId == claim.Value && s.Product.Id == shoppingCart.Product.Id);
+
+            if (shoppingCartObj == null)
+            {
+                Console.WriteLine("**************No existing shopping cart found, adding new one**************.");
+                _unitOfWork._ShoppingCartRepository.Add(shoppingCart);
+
+            }
             else
             {
                 Console.WriteLine("**************Existing shopping cart found, updating count.**************");
-				_unitOfWork._ShoppingCartRepository.IncreaseCount(shoppingCartObj, shoppingCart.Count);
+                _unitOfWork._ShoppingCartRepository.IncreaseCount(shoppingCartObj, shoppingCart.Count);
             }
+			HttpContext.Session.SetInt32(CartSession.CartSessionKey, _unitOfWork._ShoppingCartRepository.GetAll(u => u.ApplicationUserId == claim.Value).ToList().Count());
 			_unitOfWork.Complete();
+
 			return RedirectToAction("Index");
-		}
-	}
+        }
+    }
 }
- 
