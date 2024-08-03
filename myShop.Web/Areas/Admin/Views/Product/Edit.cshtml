@@ -1,0 +1,59 @@
+﻿@using myShop.Entities.ViewModels
+@model ProductViewModel
+
+@{
+	ViewBag.PageTitle = "Product Management";
+	ViewBag.CardTitle = "Edit Product";
+	Layout = "~/Views/Shared/_Dashboard.cshtml";
+}
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
+	<input type="hidden" asp-for="Product.Id"/>
+	<input type="hidden" asp-for="Product.Img" />
+
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	<div class="mb-3">
+		<label asp-for="Product.Name"></label>
+		<input asp-for="Product.Name" class="form-control" />
+		<span asp-validation-for="Product.Name" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Product.Description"></label>
+		<textarea id="myTextArea" asp-for="Product.Description" class="form-control"></textarea>
+		<span asp-validation-for="Product.Description" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Product.Price"></label>
+		<input asp-for="Product.Price" class="form-control" />
+		<span asp-validation-for="Product.Price" class="text-danger"></span>
+	</div>
+	<div class="mb-3">
+		<label asp-for="Product.Img"></label>
+		<input name="file" id="imgFile" type="file" class="form-control" />
+	</div>
+	<div class="mb-3">
+		<label asp-for="Product.CategoryId"></label>
+		<br />
+		<select asp-for="Product.CategoryId" asp-items="Model.CategoryList" class="form-control">
+			<option disabled selected>** Select Category **</option>
+		</select>
+	</div>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-success"> Edit </button>
+		<a asp-action="Index" asp-controller="Product" class="btn btn-warning">Back To Index</a>
+	</div>
+	<div class="col-md-4">
+		<div class="container">
+			<img src="@Model.Product.Img" style="width:500px;height:300px;margin-left:300px"/>
+		</div>
+	</div>
+
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		tinymce.init({
+			selector: '#myTextArea',
+		});
+	</script>
+}
